@@ -61,7 +61,7 @@ Netchat::Netchat(QWidget *parent) :
 
 #ifdef Q_OS_WIN
     // Configure the notification system for Windows platforms
-    m_systemTray->setIcon(QIcon(":/resources/icon.png"));
+    m_systemTray->setIcon(QIcon(":/res/icon.png"));
 #endif
 
     // Connect signals with slots
