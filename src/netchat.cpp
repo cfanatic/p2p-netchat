@@ -6,6 +6,7 @@ const QString Netchat::m_appName = "Netchat";
 Netchat::Netchat(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Netchat),
+    m_dialogOptions(new Options(this)),
     m_socket(new QUdpSocket(this)),
     m_systemTray(new QSystemTrayIcon(this)),
     m_layoutMessageLog(new QGridLayout(this)),
@@ -15,7 +16,7 @@ Netchat::Netchat(QWidget *parent) :
     // Initialize main window
     ui->setupUi(this);
     ui->textMessage->setAttribute(Qt::WA_MacShowFocusRect, 0);
-    this->setFixedSize(m_width, m_height);
+    this->setFixedSize(500, 230);
     this->setFocusPolicy(Qt::StrongFocus);
 
     // Initialize message log of the main window
@@ -27,9 +28,6 @@ Netchat::Netchat(QWidget *parent) :
     m_scrollMessageLog->setGeometry(10, 10, 480, 177);
     m_scrollMessageLog->setWidget(widgetMessageLog);
     m_scrollMessageBar = m_scrollMessageLog->verticalScrollBar();
-
-    // Initialize options window
-    m_dialogOptions = new Options(this);
 
     // Initialize encryption salt
     Botan::AutoSeeded_RNG rng;
@@ -65,17 +63,17 @@ Netchat::Netchat(QWidget *parent) :
 #endif
 
     // Connect signals with slots
-    connect(m_socket, SIGNAL(readyRead()), this, SLOT(getDatagrams()));
     connect(ui->buttonOptions, SIGNAL(clicked(bool)), this, SLOT(showOptions()));
-    connect(m_dialogOptions->m_buttonBind, SIGNAL(clicked(bool)), this, SLOT(bindAddress()));
     connect(ui->textMessage, SIGNAL(returnPressed()), this, SLOT(sendMessage()));
     connect(ui->textMessage, SIGNAL(textEdited(QString)), this, SLOT(setTyping(QString)));
+    connect(m_socket, SIGNAL(readyRead()), this, SLOT(getMessage()));
+    connect(m_dialogOptions->m_buttonBind, SIGNAL(clicked(bool)), this, SLOT(bindAddress()));
     connect(m_systemTray, SIGNAL(messageClicked()), this, SLOT(resetNotification()));
     connect(m_scrollMessageBar, SIGNAL(rangeChanged(int,int)), this, SLOT(moveScrollBarToBottom(int, int)));
     connect(m_textTimer, SIGNAL(timeout()), SLOT(resetTyping()));
-    connect(this, SIGNAL(receivedMessage(QString, QString)), this, SLOT(setNotification(QString, QString)));
-    connect(this, SIGNAL(sendConnect()), this, SLOT(connectHandler()));
-    connect(this, SIGNAL(sendDisconnect()), this, SLOT(disconnectHandler()));
+    connect(this, SIGNAL(execMessage(QString, QString)), this, SLOT(setNotification(QString, QString)));
+    connect(this, SIGNAL(execConnect()), this, SLOT(connectHandler()));
+    connect(this, SIGNAL(execDisconnect()), this, SLOT(disconnectHandler()));
     connect(qApp, SIGNAL(focusChanged(QWidget*, QWidget*)), this, SLOT(resetNotification()));
 }
 
@@ -131,7 +129,7 @@ void Netchat::bindAddress()
     // Notify server of a new client connection
     m_socket->writeDatagram(udpPaket, m_serverAddr, m_serverPort);
     m_dialogOptions->close();
-    emit sendConnect();
+    emit execConnect();
 }
 
 void Netchat::sendMessage(QString message)
@@ -198,7 +196,7 @@ void Netchat::sendMessage(QString message)
     }
 }
 
-void Netchat::getDatagrams()
+void Netchat::getMessage()
 {
     QByteArray datagram;
     QHostAddress senderAddress;
@@ -332,7 +330,7 @@ void Netchat::getDatagrams()
             m_scrollMessageLog->verticalScrollBar()->setValue(m_scrollMessageLog->verticalScrollBar()->value() + 10);
 
             // Use host computer notification system that a new message has been received
-            emit receivedMessage(user, text);
+            emit execMessage(user, text);
         }
         qDebug() << "N::getDiagrams(): \t\t" << text;
     }
@@ -414,7 +412,7 @@ void Netchat::keyPressEvent(QKeyEvent *event)
             if (m_socket->state() == QAbstractSocket::BoundState)
             {
                 // Send QUIT message and wait one second for the delivery
-                emit sendDisconnect();
+                emit execDisconnect();
                 QTimer::singleShot(1000, qApp, SLOT(quit()));
             }
             else
@@ -449,14 +447,6 @@ void Netchat::disconnectHandler()
     sendMessage("QUIT");
 }
 
-void Netchat::moveScrollBarToBottom(int min, int max)
-{
-    Q_UNUSED(min);
-
-    // Scroll to bottom window, because a new message has been received
-    m_scrollMessageLog->verticalScrollBar()->setValue(max);
-}
-
 void Netchat::setTyping(QString text)
 {
     Q_UNUSED(text);
@@ -478,6 +468,14 @@ void Netchat::resetTyping()
     // Update typing status since host user stopped typing
     m_textTimer->stop();
     sendMessage("NOT_TYPING");
+}
+
+void Netchat::moveScrollBarToBottom(int min, int max)
+{
+    Q_UNUSED(min);
+
+    // Scroll to bottom window, because a new message has been received
+    m_scrollMessageLog->verticalScrollBar()->setValue(max);
 }
 
 QString Netchat::getOsName()

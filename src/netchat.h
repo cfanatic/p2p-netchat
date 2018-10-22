@@ -62,31 +62,29 @@ private:
     QScrollBar *m_scrollMessageBar;
     QTimer *m_textTimer;
     static const QString m_appName;
-    static const quint16 m_width = 500;
-    static const quint16 m_height = 230;
 
 public slots:
 
 private slots:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
-    void getDatagrams();
-    void showOptions();
     void bindAddress();
     void sendMessage(QString message = "");
+    void getMessage();
+    void showOptions();
     void setNotification(QString user, QString text);
     void resetNotification();
     void connectHandler();
     void disconnectHandler();
-    void moveScrollBarToBottom(int min, int max);
     void setTyping(QString text);
     void resetTyping();
+    void moveScrollBarToBottom(int min, int max);
     QString getOsName();
 
 signals:
-    void receivedMessage(QString user, QString text);
-    void sendConnect();
-    void sendDisconnect();
+    void execMessage(QString user, QString text);
+    void execConnect();
+    void execDisconnect();
 
 };
 
