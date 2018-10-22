@@ -230,7 +230,7 @@ void Netchat::getMessage()
         QString text;
         text = datagram.mid(6 + saltSize + 19);
 
-        qDebug() << "N::getDiagrams(): " << user << "\t" << saltSize << salt << text;
+        qDebug() << "N::getMessage(): " << user << "\t" << saltSize << salt << text;
 
         // Decrypt text message using AES-256
         try
@@ -332,7 +332,7 @@ void Netchat::getMessage()
             // Use host computer notification system that a new message has been received
             emit execMessage(user, text);
         }
-        qDebug() << "N::getDiagrams(): \t\t" << text;
+        qDebug() << "N::getMessage(): \t\t" << text;
     }
 }
 
