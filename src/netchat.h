@@ -29,6 +29,7 @@
 #include "botan/aes.h"
 #include "botan/pipe.h"
 #include "botan/filters.h"
+#include "botan/version.h"
 
 namespace Ui {
 class Netchat;

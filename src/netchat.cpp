@@ -55,7 +55,10 @@ Netchat::Netchat(QWidget *parent) :
     qDebug() << "N::Netchat():  IP\t" << m_dialogOptions->m_lineAddressLocal->text();
 
     // Print operating system of the host computer
-    qDebug() << "N::Netchat():  OS\t" << getOsName() << endl;
+    qDebug() << "N::Netchat():  OS\t" << getOsName();
+
+    // Print release version of Botan:
+    qDebug() << "N::Netchat():  Botan\t" << Botan::short_version_string().c_str() << endl;
 
 #ifdef Q_OS_WIN
     // Configure the notification system for Windows platforms
