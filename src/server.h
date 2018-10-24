@@ -24,8 +24,8 @@ private:
     QVector<QMap<QString, quint16>> m_connection;
 
 private slots:
-    void getDatagrams();
-    void sendMessage(QByteArray senderDatagram);
+    void getDatagram();
+    void sendDatagram(QByteArray senderDatagram);
 
 signals:
 

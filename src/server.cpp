@@ -6,7 +6,7 @@ Server::Server(QHostAddress serverAddr, quint16 serverPort, QObject *parent) :
     m_serverAddr(serverAddr),
     m_serverPort(serverPort)
 {
-    connect(m_socket, SIGNAL(readyRead()), this, SLOT(getDatagrams()));
+    connect(m_socket, SIGNAL(readyRead()), this, SLOT(getDatagram()));
 }
 
 Server::~Server()
@@ -30,7 +30,7 @@ void Server::stopServer()
     m_socket->abort();
 }
 
-void Server::getDatagrams()
+void Server::getDatagram()
 {
     QByteArray senderDatagram;
     QHostAddress senderAddress;
@@ -55,11 +55,11 @@ void Server::getDatagrams()
     else
     {
         // New message received which will be forwarded to both clients
-        sendMessage(senderDatagram.simplified());
+        sendDatagram(senderDatagram.simplified());
     }
 }
 
-void Server::sendMessage(QByteArray senderDatagram)
+void Server::sendDatagram(QByteArray senderDatagram)
 {
     if (m_socket->state() == QAbstractSocket::BoundState)
     {
