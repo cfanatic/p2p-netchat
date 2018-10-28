@@ -1,11 +1,21 @@
 #include "options.h"
 
+/*
+ *   !!! WARNING !!!
+ *   ---------------
+ *   It is not recommended to use this pre-defined encryption key!
+ *   Change the key within the application, before you start texting.
+ *
+*/
+
+#define ENCRYPTION_KEY  "!change-this-key!"
+
 Options::Options(QWidget *parent) :
     QDialog(parent)
 {
     // Initialize options window and set default values
     m_labelKey = new QLabel("Encryption Key:");
-    m_lineKey = new QLineEdit("car-tree-subway-fish");
+    m_lineKey = new QLineEdit(ENCRYPTION_KEY);
     m_layoutEncryption = new QVBoxLayout();
     m_layoutEncryption->addWidget(m_labelKey);
     m_layoutEncryption->addWidget(m_lineKey);
