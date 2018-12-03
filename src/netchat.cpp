@@ -16,7 +16,7 @@ Netchat::Netchat(QWidget *parent) :
     // Initialize main window
     ui->setupUi(this);
     ui->textMessage->setAttribute(Qt::WA_MacShowFocusRect, 0);
-    this->setFixedSize(500, 230);
+    this->setFixedSize(475, 335);
     this->setFocusPolicy(Qt::StrongFocus);
 
     // Initialize message log of the main window
@@ -25,7 +25,7 @@ Netchat::Netchat(QWidget *parent) :
     widgetMessageLog->setLayout(m_layoutMessageLog);
     m_layoutMessageLog->setAlignment(Qt::AlignTop);
     m_scrollMessageLog->setWidgetResizable(true);
-    m_scrollMessageLog->setGeometry(10, 10, 480, 177);
+    m_scrollMessageLog->setGeometry(10, 10, 455, 280);
     m_scrollMessageLog->setWidget(widgetMessageLog);
     m_scrollMessageBar = m_scrollMessageLog->verticalScrollBar();
 

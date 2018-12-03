@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>498</width>
-    <height>242</height>
+    <width>475</width>
+    <height>335</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,9 +33,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
-     <width>481</width>
-     <height>60</height>
+     <y>289</y>
+     <width>461</width>
+     <height>51</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,0,0">
