@@ -25,6 +25,6 @@ Depicted below is the communication model:
 ![Communication model](https://raw.githubusercontent.com/cfanatic/p2p-netchat/master/res/architecture.png)
 
 ## Usage
-[**This video**](https://codefanatic.de/git/netchat-p2p.m4v) presents the general usage and features. Please remember that only peer-to-peer connections are supported.
+[**This video**](https://codefanatic.de/git/netchat-p2p.mp4) presents the general usage and features. Please remember that only peer-to-peer connections are supported.
 
 [![Click to open video](https://raw.githubusercontent.com/cfanatic/p2p-netchat/master/res/preview.png)](https://codefanatic.de/git/netchat-p2p.m4v)
